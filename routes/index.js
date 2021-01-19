@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const Joi = require("joi");
-const { userData } = require("../config/database");
+const { userData, clientData } = require("../config/database");
 /* GET home page. */
 router.get("/", function (req, res, next) {
 	res.render("index", { title: "Express" });
@@ -70,4 +70,37 @@ router.post("/createUser", async (req, res) => {
 		console.log(err);
 	}
 });
+router.post("/clientMessage", async (req, res) => {
+	const { body } = req;
+	const clientSchema = Joi.object({
+		Name: Joi.string().required(),
+		Email: Joi.string().email().required(),
+		Subject: Joi.string().required(),
+		Message: Joi.string().required(),
+	});
+	try {
+		const { error } = clientSchema.validate(body);
+		if (error) {
+			return res.json({
+				message: "",
+				error: error.message,
+				success: false,
+			});
+		}
+		const createUser = await clientData.create(body);
+		if (!createUser) {
+			return res.json({
+				message: "something went wrong",
+				success: false,
+			});
+		}
+		return res.json({
+			message: "Thank You",
+			success: true,
+		});
+	} catch (err) {
+		console.log(err);
+	}
+});
+router.get("/getClientMessage", async (req, res) => {});
 module.exports = router;

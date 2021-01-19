@@ -1,5 +1,6 @@
 let mongoose = require("mongoose");
 const userData = require("../model/User");
+const clientData = require("../model/client");
 //let settings = require("./settings.json");
 const pass = "oxk5C264ulZAkLbP";
 let cluster = `mongodb+srv://test-now:${pass}@cluster0.3tun2.mongodb.net/test_now?retryWrites=true&w=majority`;
@@ -34,4 +35,4 @@ process.on("SIGINT", function () {
 	});
 });
 
-module.exports = { mongoose, userData };
+module.exports = { mongoose, userData, clientData };
